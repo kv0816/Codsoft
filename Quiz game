@@ -1,0 +1,78 @@
+import random
+
+class QuizGame:
+    def __init__(self, questions):
+        self.questions = questions
+        self.score = 0
+
+    def display_welcome_message(self):
+        print("Welcome to the Quiz Game!")
+
+        print("- Your score will be calculated at the end.")
+
+    def present_quiz_questions(self):
+        random.shuffle(self.questions)
+        for question in self.questions:
+            print("\nQuestion: " + question['question'])
+            if 'options' in question:
+                for i, option in enumerate(question['options'], start=1):
+                    print(f"{i}. {option}")
+                user_answer = input("Your answer (enter the number): ")
+            else:
+                user_answer = input("Your answer: ")
+            self.evaluate_user_answer(question, user_answer)
+
+    def evaluate_user_answer(self, question, user_answer):
+        correct_answer = question['answer'].lower() if 'options' not in question else str(question['options'].index(question['answer']) + 1)
+        if user_answer.lower() == correct_answer:
+            print("Correct!")
+            self.score += 1
+        else:
+            print(f"Incorrect! The correct answer is: {question['answer']}")
+
+    def display_final_results(self):
+        print("\nQuiz completed!")
+        print(f"Your final score is: {self.score}/{len(self.questions)}")
+        if self.score == len(self.questions):
+            print("Congratulations! You got all questions right.")
+        elif self.score >= len(self.questions) / 2:
+            print("Well done! You did a good job.")
+        else:
+            print("Better luck next time.")
+
+    def play_again(self):
+        response = input("\nDo you want to play again? (yes/no): ").lower()
+        return response == 'yes'
+
+# Sample quiz questions
+quiz_questions = [
+    {
+        'question': 'What is the capital of India?',
+        'options': ['chennai', 'New Delhi', 'Bangalore', 'Mumbai'],
+        'answer': 'New Delhi'
+    },
+    {
+        'question': 'Who wrote the national anthem of india"?',
+        'options': ['Rabindranath Tagore', 'Gandhi', 'Adbul Kalam', 'Ambedkhar'],
+        'answer': 'Rabindranath Tagore'
+
+    },
+    {
+        'question': 'What is the largest planet in our solar system?',
+        'options': ['Mars', 'Jupiter', 'Venus', 'Saturn'],
+        'answer': 'Jupiter'
+    },
+    # Add more questions as needed
+]
+
+def main():
+    while True:
+        quiz = QuizGame(quiz_questions)
+        quiz.display_welcome_message()
+        quiz.present_quiz_questions()
+        quiz.display_final_results()
+        if not quiz.play_again():
+            break
+
+if __name__ == "__main__":
+    main()
